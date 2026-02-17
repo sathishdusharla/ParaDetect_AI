@@ -2,8 +2,8 @@ import { GoogleGenAI, Type } from "@google/genai";
 import { AnalysisResult, Species, Stage, Severity, LabData } from "../types";
 import { runDeepLearningAnalysis, DLModelOutput } from "./deepLearningModel";
 
-// Initialize Gemini API Key (same pattern as working project)
-const apiKey = import.meta.env.VITE_GEMINI_API_KEY || 'AIzaSyD76E6vZgvG9SH7md7_0KfxhVFCZSLDhfc';
+// Initialize Gemini API Key
+const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
 console.log('🔑 Gemini API Key Status:', {
   exists: !!apiKey,
   length: apiKey?.length || 0,
