@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { User, Stethoscope, ArrowRight, Droplets, ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
+import { User, Stethoscope, ArrowRight, Droplets, ArrowLeft, Loader2, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { UserRole } from '../types';
 import { signIn, signUp } from '../services/supabaseClient';
 
@@ -15,6 +15,8 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [fullName, setFullName] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,11 +55,6 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
     setEmail('');
     setPassword('');
     setFullName('');
-  };
-
-  const handleQuickLogin = (demoEmail: string, demoPassword: string) => {
-    setEmail(demoEmail);
-    setPassword(demoPassword);
   };
 
   return (
@@ -193,25 +190,43 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
                     </div>
                     <div className="space-y-2">
                       <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Secure Key</label>
-                      <input 
-                        type="password" 
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        placeholder="Min. 6 characters"
-                        required
-                        minLength={6}
-                        className="w-full input-3d rounded-2xl px-6 py-4 font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
-                      />
+                      <div className="relative">
+                        <input 
+                          type={showPassword ? "text" : "password"}
+                          value={password}
+                          onChange={(e) => setPassword(e.target.value)}
+                          placeholder="Min. 6 characters"
+                          required
+                          minLength={6}
+                          className="w-full input-3d rounded-2xl px-6 py-4 pr-12 font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                        >
+                          {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                        </button>
+                      </div>
                     </div>
                     
                     {isRegistering && (
                       <div className="space-y-2 animate-fade-in">
                         <label className="block text-xs font-bold text-slate-500 uppercase tracking-wider ml-1">Confirm Key</label>
-                        <input 
-                          type="password" 
-                          placeholder="Confirm password"
-                          className="w-full input-3d rounded-2xl px-6 py-4 font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
-                        />
+                        <div className="relative">
+                          <input 
+                            type={showConfirmPassword ? "text" : "password"}
+                            placeholder="Confirm password"
+                            className="w-full input-3d rounded-2xl px-6 py-4 pr-12 font-bold text-slate-700 focus:outline-none focus:ring-2 focus:ring-rose-500"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                            className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 transition-colors"
+                          >
+                            {showConfirmPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                          </button>
+                        </div>
                       </div>
                     )}
 
@@ -229,29 +244,6 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
                         <>{isRegistering ? 'Create Account & Enter' : 'Authenticate & Enter'}</>
                       )}
                     </button>
-
-                    {!isRegistering && (
-                      <div className="pt-6 mt-6 border-t border-slate-200">
-                        <p className="text-xs text-slate-500 text-center mb-4 font-bold uppercase tracking-wider">Quick Demo Access</p>
-                        <div className="grid grid-cols-2 gap-3">
-                          <button
-                            type="button"
-                            onClick={() => handleQuickLogin('patient@example.com', 'patient123')}
-                            className="text-xs bg-teal-50 text-teal-600 px-4 py-3 rounded-xl font-bold hover:bg-teal-100 transition-colors flex items-center justify-center shadow-sm"
-                          >
-                            <User className="w-4 h-4 mr-1" /> Demo Patient
-                          </button>
-                          <button
-                            type="button"
-                            onClick={() => handleQuickLogin('dr.smith@paradetect.ai', 'doctor123')}
-                            className="text-xs bg-rose-50 text-rose-600 px-4 py-3 rounded-xl font-bold hover:bg-rose-100 transition-colors flex items-center justify-center shadow-sm"
-                          >
-                            <Stethoscope className="w-4 h-4 mr-1" /> Demo Doctor
-                          </button>
-                        </div>
-                        <p className="text-[10px] text-slate-400 text-center mt-3 italic">Use these for instant testing without registration</p>
-                      </div>
-                    )}
                  </form>
 
                  <div className="mt-8 text-center">
