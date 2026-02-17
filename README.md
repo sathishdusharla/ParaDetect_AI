@@ -7,7 +7,7 @@
 [![React](https://img.shields.io/badge/React-19.2.4-61DAFB?logo=react)](https://react.dev/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.8.2-3178C6?logo=typescript)](https://www.typescriptlang.org/)
 [![Supabase](https://img.shields.io/badge/Supabase-2.95.3-3ECF8E?logo=supabase)](https://supabase.com/)
-[![License](https://img.shields.io/badge/License-Private-red.svg)]()
+[![License](https://img.shields.io/badge/License-MIT-green.svg)]()
 
 **Production-Grade Hybrid AI System combining Deep Learning CNN with Google's Gemini 2.5 Flash for accurate malaria diagnosis from blood smear microscopy images.**
 
@@ -23,13 +23,9 @@
 - [Key Features](#-key-features)
 - [System Architecture](#-system-architecture)
 - [Technology Stack](#-technology-stack)
-- [Installation](#-installation)
-- [CNN Model Training](#-cnn-model-training)
-- [Usage Guide](#-usage-guide)
 - [Performance Metrics](#-performance-metrics)
 - [API Documentation](#-api-documentation)
 - [Medical Disclaimer](#-medical-disclaimer)
-- [Contributing](#-contributing)
 - [License](#-license)
 
 ---
@@ -247,293 +243,7 @@ AI Analysis:
 - **npm** - Package manager
 - **ESLint + Prettier** - Code quality tools
 
----
 
-## 🚀 Installation
-
-### Prerequisites
-
-- **Node.js** v18.0.0+ (v24.4.1 tested and recommended)
-- **npm** v9.0.0+
-- **Git** (for cloning repository)
-- **Modern browser** with WebGL support (Chrome, Firefox, Safari, Edge)
-- **2GB+ RAM** (for model training)
-
-### Quick Start
-
-```bash
-# 1. Clone the repository
-git clone <repository-url>
-cd paradetect-ai-5.0
-
-# 2. Install dependencies
-npm install
-
-# 3. Configure environment variables
-echo "VITE_GEMINI_API_KEY=your_gemini_api_key_here" > .env
-
-# 4. Verify model files exist (or skip to training section)
-ls -lh public/models/malaria-detection/
-# Should see: model.json (4.5 KB) and weights.bin (16.4 MB)
-
-# 5. Start development server
-npm run dev
-
-# 6. Open browser
-# Navigate to http://localhost:5173 (or shown port)
-```
-
-### Environment Variables
-
-Create a `.env` file in the project root:
-
-```env
-# Required: Google Gemini API Key
-VITE_GEMINI_API_KEY=your_gemini_api_key_here
-
-# Optional: Supabase Configuration (if using custom instance)
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key_here
-```
-
-**Get your Gemini API key:**
-1. Visit [Google AI Studio](https://makersuite.google.com/app/apikey)
-2. Sign in with Google account
-3. Create new API key
-4. Copy and paste into `.env` file
-
-### Verify Installation
-
-```bash
-# Check Node.js version
-node --version  # Should be v18.0.0+
-
-# Check npm version
-npm --version   # Should be v9.0.0+
-
-# Check installed packages
-npm list --depth=0
-
-# Check model files
-ls -lh public/models/malaria-detection/
-```
-
----
-
-## 🧠 CNN Model Training
-
-The system includes a **pre-trained CNN model** (trained Feb 17, 2026), but you can retrain it for better customization.
-
-### Using the Pre-Trained Model
-
-The repository includes a trained model in `public/models/malaria-detection/`:
-- ✅ `model.json` (4,584 bytes) - Model architecture
-- ✅ `weights.bin` (17,151,236 bytes) - Trained weights (~16.4 MB)
-- ✅ Trained on 10,000 images (5,000 per class)
-- ✅ 95%+ validation accuracy
-- ✅ Ready for immediate use
-
-**No training required** - the model works out of the box! 🎉
-
-### Retraining the Model (Optional)
-
-Want to retrain with custom parameters or full dataset?
-
-#### Prerequisites for Training
-
-```bash
-# Install training dependencies (if not already installed)
-npm install --save-dev sharp
-
-# Verify dataset exists
-ls -lh cell_images/
-# Should show: Parasitized/ (13,780 images) and Uninfected/ (13,780 images)
-```
-
-#### Training Process
-
-```bash
-# Start training (default: 10,000 images, ~30-40 minutes)
-npm run train
-
-# The script will:
-# 1. Load images using Sharp library (reliable preprocessing)
-# 2. Resize to 128×128 RGB
-# 3. Normalize pixel values [0, 255] → [0, 1]
-# 4. Create tensors and batches
-# 5. Train 10-layer CNN for 15 epochs
-# 6. Save model to public/models/malaria-detection/
-```
-
-#### Training Configuration
-
-Edit `train_model.js` to customize:
-
-```javascript
-const CONFIG = {
-  imageSize: 128,           // Image dimensions (128×128)
-  batchSize: 32,            // Batch size for training
-  epochs: 15,               // Number of training epochs
-  validationSplit: 0.2,     // 20% validation split
-  maxImagesPerClass: 5000,  // Images per class (5000 = 10k total)
-                           // Set to null for full 27,560 images
-};
-```
-
-**Training Options:**
-
-| Config | Images | Training Time | RAM Usage | Accuracy |
-|--------|--------|---------------|-----------|----------|
-| Fast (default) | 10,000 | 30-40 min | 1-2 GB | 95%+ |
-| Full dataset | 27,560 | 2-3 hours | 2-4 GB | 96-97% |
-| Quick test | 2,000 | 5-10 min | <1 GB | 90-92% |
-
-#### Monitor Training Progress
-
-```bash
-# In another terminal, check training status
-ps aux | grep train_model.js
-
-# Expected output:
-# - CPU: 250-350% (multi-core usage)
-# - Memory: 1-2 GB
-# - Time: 30-40 minutes (10k images)
-
-# Check if model files were created
-ls -lh public/models/malaria-detection/
-```
-
-#### Troubleshooting Training
-
-**Error: `isNullOrUndefined is not a function`**
-- Solution: Polyfill already included in `train_model.js`
-- This is a Node.js v24+ compatibility fix
-
-**Error: `Cannot find module 'sharp'`**
-```bash
-npm install --save-dev sharp
-```
-
-**Error: Out of memory**
-- Reduce `maxImagesPerClass` to 1000 or 2000
-- Close other applications
-- Upgrade RAM (recommended: 4GB+)
-
-**Training hangs at "Converting to tensors..."**
-- Be patient - this step takes 2-5 minutes for 10k images
-- Check CPU usage is high (300%+)
-
----
-
-## 📖 Usage Guide
-
-### 1. Blood Smear Analysis
-
-**Step-by-step workflow:**
-
-1. **Login/Signup**
-   ```
-   - Create account or login with existing credentials
-   - System supports Doctor and Patient roles
-   ```
-
-2. **Navigate to ParasiteScan**
-   ```
-   - Click "Parasite Scan" in navigation menu
-   ```
-
-3. **Upload Blood Smear Image**
-   ```
-   - Click "Choose File" or drag-and-drop
-   - Supported formats: JPEG, PNG, WebP
-   - Recommended: High-quality microscopy images (Giemsa-stained)
-   ```
-
-4. **Enter Patient Information**
-   ```
-   - Patient Name
-   - Patient ID
-   - Age
-   - Symptoms (fever, chills, etc.)
-   - Travel history
-   - Medical history
-   ```
-
-5. **Click "Analyze Image"**
-   ```
-   Stage 1: CNN Analysis (500ms)
-   - Binary classification: Infected/Uninfected
-   - Confidence score displayed
-   
-   Stage 2: Gemini Analysis (2-3s) [if infected]
-   - Species identification
-   - Parasitemia calculation
-   - Clinical interpretation
-   - Treatment recommendations
-   ```
-
-6. **Review Results**
-   ```
-   - Infection status with confidence
-   - Species and lifecycle stage
-   - Parasitemia percentage
-   - Severity classification
-   - WHO treatment protocol
-   - Clinical notes
-   ```
-
-7. **Save or Download Report**
-   ```
-   - "Save Report" → Store in database
-   - "Download PDF" → Professional medical report
-   ```
-
-### 2. Lab Risk Prediction
-
-1. Navigate to **Lab Risk Predictor**
-2. Enter lab parameters:
-   - Hemoglobin (g/dL)
-   - Platelet count (×10³/μL)
-   - WBC count (×10³/μL)
-   - Total bilirubin (mg/dL)
-   - Fever status (Yes/No)
-3. Click **"Predict Risk"**
-4. View AI-generated risk assessment:
-   - Risk level: Low/Medium/High
-   - Probability score
-   - Clinical interpretation
-   - Recommendations
-
-### 3. Managing Records
-
-**View Records:**
-```
-My Records → Table shows all your tests
-- Date, Type, Status, Result
-- Click row to view full details
-```
-
-**Download PDF:**
-```
-Click download icon → Professional PDF report
-```
-
-**Delete Record:**
-```
-Click delete icon → Confirm deletion
-```
-
-### 4. Booking Appointments
-
-```
-Book Test → Fill form:
-- Patient name
-- Test type (Microscopy/Lab)
-- Appointment date & time
-- Additional notes
-
-Submit → Appointment saved
-```
 
 ---
 
@@ -701,66 +411,31 @@ For clinical validation questions, adverse event reporting, or medical inquiries
 
 ---
 
-## 🤝 Contributing
-
-We welcome contributions from the medical AI community!
-
-### How to Contribute
-
-1. **Fork the repository**
-2. **Create a feature branch**
-   ```bash
-   git checkout -b feature/amazing-feature
-   ```
-3. **Make your changes**
-4. **Commit with clear messages**
-   ```bash
-   git commit -m "Add: Feature description"
-   ```
-5. **Push to your fork**
-   ```bash
-   git push origin feature/amazing-feature
-   ```
-6. **Open a Pull Request**
-
-### Contribution Guidelines
-
-- ✅ Follow TypeScript coding standards
-- ✅ Add comments for complex logic
-- ✅ Update documentation for new features
-- ✅ Test thoroughly before submitting
-- ✅ Include medical validation data if applicable
-- ✅ Follow HIPAA compliance guidelines
-
-### Areas for Contribution
-
-- 🧠 **ML Model Improvements**: Better architectures, transfer learning
-- 🌐 **Internationalization**: Multi-language support
-- 📱 **Mobile App**: React Native implementation
-- 🔬 **Additional Parasites**: Support for Babesia, Trypanosoma, etc.
-- 📊 **Advanced Analytics**: Batch processing, trend analysis
-- 🏥 **Clinical Integration**: HL7/FHIR interfaces for hospital systems
-- 🧪 **Quality Control**: Automated image quality assessment
-
----
-
 ## 📄 License
 
-**Private License** - All rights reserved.
+MIT License
 
-This project is proprietary software. Unauthorized copying, modification, distribution, or use of this software, via any medium, is strictly prohibited without explicit written permission from the copyright holder.
+Copyright (c) 2026 ParaDetect AI Team
 
-### Academic & Research Use
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-For academic research and non-commercial educational purposes, please contact the development team for licensing arrangements.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-### Commercial Use
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
-For commercial licensing inquiries, healthcare institution partnerships, or deployment in clinical settings, please contact:
-
-📧 Email: [Contact information]  
-🌐 Website: [Website URL]  
-🏢 Organization: [Organization name]
+**Medical Use Disclaimer**: This software is intended for research and educational purposes. See the Medical Disclaimer section above for important limitations regarding clinical use.
 
 ---
 
