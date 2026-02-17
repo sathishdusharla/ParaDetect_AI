@@ -11,7 +11,7 @@
 
 **Production-Grade Hybrid AI System combining Deep Learning CNN with Google's Gemini 2.5 Flash for accurate malaria diagnosis from blood smear microscopy images.**
 
-[View in AI Studio](https://ai.studio/apps/drive/1B0yurSrGhjoiqxvn4EoEP6IQvIgQ6Sre) | [Documentation](PROJECT_DOCUMENTATION.txt) | [Report Issues](../../issues)
+[Report Issues](../../issues)
 
 </div>
 
@@ -25,7 +25,6 @@
 - [Technology Stack](#-technology-stack)
 - [Performance Metrics](#-performance-metrics)
 - [API Documentation](#-api-documentation)
-- [Medical Disclaimer](#-medical-disclaimer)
 - [License](#-license)
 
 ---
@@ -367,50 +366,6 @@ await deleteReport(reportId);
 
 ---
 
-## ⚕️ Medical Disclaimer
-
-**IMPORTANT - READ CAREFULLY:**
-
-⚠️ **This system is a clinical decision support tool designed to ASSIST qualified healthcare professionals.**
-
-### Limitations and Requirements:
-
-- ✋ **NOT a Standalone Diagnostic Tool**: All results must be validated by qualified medical personnel with expertise in microscopy and parasitology.
-
-- 🔬 **Expert Validation Required**: AI predictions should be confirmed through conventional microscopy examination by trained microscopists.
-
-- 🏥 **Not FDA/CE Approved**: This system has not been approved by regulatory bodies (FDA, CE marking) for clinical use as a standalone diagnostic device.
-
-- 📋 **Clinical Judgment Required**: Treatment decisions must incorporate patient clinical presentation, medical history, and other diagnostic findings.
-
-- 🌍 **Regional Variation**: Treatment protocols may vary by region due to drug resistance patterns. Consult local guidelines.
-
-- 🧪 **Quality Control**: Results depend on blood smear quality, staining protocol, and imaging equipment standardization.
-
-### Proper Use:
-
-✅ **Screening Tool**: Rapid screening in resource-limited settings  
-✅ **Educational**: Training and teaching medical students  
-✅ **Research**: Clinical research and diagnostic method validation  
-✅ **Second Opinion**: Supporting diagnosis alongside standard methods  
-
-❌ **NOT for**: Standalone clinical diagnosis without expert confirmation  
-❌ **NOT for**: Self-diagnosis by patients  
-❌ **NOT for**: Replacing laboratory-confirmed diagnosis  
-
-### Regulatory Compliance:
-
-- **HIPAA Considerations**: System designed with HIPAA-aware patterns for patient data protection
-- **Data Privacy**: All patient data encrypted in transit (HTTPS) and at rest
-- **Informed Consent**: Required for AI-assisted diagnosis in clinical settings
-- **Audit Trail**: Maintain logs of all AI-assisted diagnoses for quality assurance
-
-### Contact:
-
-For clinical validation questions, adverse event reporting, or medical inquiries, contact qualified medical professionals and regulatory authorities in your jurisdiction.
-
----
-
 ## 📄 License
 
 MIT License
@@ -435,21 +390,17 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
-**Medical Use Disclaimer**: This software is intended for research and educational purposes. See the Medical Disclaimer section above for important limitations regarding clinical use.
-
 ---
 
 ## 📞 Support & Contact
 
 ### Technical Support
 
-- 📖 **Documentation**: See [PROJECT_DOCUMENTATION.txt](PROJECT_DOCUMENTATION.txt) for comprehensive technical details
-- 🐛 **Bug Reports**: [Open an issue](../../issues)
+- � **Bug Reports**: [Open an issue](../../issues)
 - 💬 **Discussions**: [GitHub Discussions](../../discussions)
 
 ### Project Information
 
-- 🔗 **AI Studio**: [View Project](https://ai.studio/apps/drive/1B0yurSrGhjoiqxvn4EoEP6IQvIgQ6Sre)
 - 📊 **Version**: 5.0.0
 - 📅 **Release Date**: February 2026
 - 🏗️ **Status**: Production-Ready (Model trained and deployed)
