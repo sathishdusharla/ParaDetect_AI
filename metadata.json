@@ -1,0 +1,7 @@
+{
+  "name": "ParaDetect AI 5.0",
+  "description": "Deep Learning-Based Malaria Diagnosis & Clinical Decision Support System",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
